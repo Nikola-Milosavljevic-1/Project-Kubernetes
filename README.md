@@ -8,7 +8,7 @@ afin que l’équipe puisse développer les fonctionnalités métier.
 
 ---
 
-## Architecture
+## 1. Architecture
 
 Frontend → Backend API → MongoDB
 (orchestré avec Kubernetes)
@@ -22,7 +22,7 @@ yaml
 
 ---
 
-## Structure du projet
+## 2. Structure du projet
 
 frontend-backend-kubernetes/
 ├── backend/ # API Node.js
@@ -34,7 +34,7 @@ Copier le code
 
 ---
 
-## Prérequis
+## 3. Prérequis
 
 - Docker
 - Kubernetes (Docker Desktop avec Kubernetes activé)
@@ -43,112 +43,133 @@ Copier le code
 
 ---
 
-## Développement local (sans Docker)
+## 4. L'ancement local
 
 ### Backend
+
+Installation des dépendances et démarrage du serveur :
 
 ```bash
 cd backend
 npm install
 npm start
-API disponible sur : http://localhost:3000
+```
 
+* **API disponible sur :** `http://localhost:3000`
+* **Endpoint de test :** `GET /api/health`
 
-Copier le code
-http://localhost:3000
-Endpoint de test :GET /api/health
+### Frontend
 
-bash
-Copier le code
-GET /api/health
-Frontend
-bash
-Copier le code
+```bash
 cd frontend
-Ouvrir simplement index.html dans un navigateur.
+# Ouvrir simplement index.html dans un navigateur.
+```
 
-⚠️ La communication frontend ↔ backend n’est pas active en local
-sans Docker/Kubernetes.
+> **⚠️ Attention :** La communication frontend ↔ backend n’est pas active en local sans Docker/Kubernetes.
 
-Docker
-Build des images
+---
+
+### Docker
+
+#### Build des images
+
 Depuis la racine du projet :
 
-bash
-Copier le code
+```bash
 docker build -t backend:1.0 ./backend
 docker build -t frontend:1.0 ./frontend
-Lancer les conteneurs (test simple)
-bash
-Copier le code
+```
+
+#### Lancer les conteneurs (test simple)
+
+```bash
 docker run -p 3000:3000 backend:1.0
 docker run -p 8080:80 frontend:1.0
-Frontend accessible sur :
+```
 
-arduino
-Copier le code
-http://localhost:8080
-Kubernetes (recommandé)
-Vérifier le cluster
-bash
-Copier le code
+* **Frontend accessible sur :** `http://localhost:8080`
+
+---
+
+### Kubernetes (Recommandé)
+
+#### Vérifier le cluster
+
+Assurez-vous que le nœud est en état `Ready` :
+
+```bash
 kubectl get nodes
-Le node doit être en état Ready.
+```
 
-Déployer la stack complète
+#### Déployer la stack complète
+
 Depuis la racine du projet :
 
-bash
-Copier le code
+```bash
 kubectl apply -f kubernetes/mongodb-deployment.yml
 kubectl apply -f kubernetes/backend-deployment.yml
 kubectl apply -f kubernetes/backend-service.yml
 kubectl apply -f kubernetes/frontend-deployment.yml
 kubectl apply -f kubernetes/frontend-service.yml
-Vérifier l’état des pods
-bash
-Copier le code
-kubectl get pods
-Résultat attendu :
+```
 
-sql
-Copier le code
+### Vérifications
+
+**1. Vérifier l’état des pods :**
+
+```bash
+kubectl get pods
+```
+
+*Résultat attendu :*
+
+```text
 frontend-xxxxx   1/1 Running
 backend-xxxxx    1/1 Running
 mongodb-xxxxx    1/1 Running
-Vérifier les services
-bash
-Copier le code
+```
+
+**2. Vérifier les services :**
+
+```bash
 kubectl get svc
-Accéder au frontend
-Récupérer le NodePort :
+```
 
-bash
-Copier le code
-kubectl get svc frontend
-Puis ouvrir dans un navigateur :
+### Accéder au frontend
 
+1. Récupérer le **NodePort** :
 
-Copier le code
-http://localhost:<NODE_PORT>
-Logs et debug
-Logs d’un pod
-bash
-Copier le code
+   ```bash
+   kubectl get svc frontend
+   ```
+
+2. Ouvrir dans un navigateur :
+   `http://localhost:<NODE_PORT>`
+
+---
+
+### Logs et Debug
+
+### Logs d’un pod
+
+```bash
 kubectl logs backend
 kubectl logs frontend
 kubectl logs mongodb
-Détails d’un pod
-bash
-Copier le code
+```
+
+### Détails d’un pod
+
+```bash
 kubectl describe pod backend
-Développement à poursuivre
-implémentation des routes backend
+```
 
-utilisation complète de MongoDB (models, CRUD)
+---
 
-enrichissement du frontend
+## 5. Développement à poursuivre
 
-gestion des erreurs
-
-scaling (replicas Kubernetes)
+* Implémentation des routes backend
+* Utilisation complète de MongoDB (models, CRUD)
+* Enrichissement du frontend
+* Gestion des erreurs
+* Scaling (replicas Kubernetes)

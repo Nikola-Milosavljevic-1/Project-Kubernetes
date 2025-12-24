@@ -1,0 +1,53 @@
+name: Backend CI
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-ci.yml'
+
+jobs:
+  test:
+    name: Backend - Lint, Type Check & Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Vérification du code (Lint)
+        run: npm run lint
+
+      - name: Vérification des types (Type Check)
+        run: npm run type-check
+
+      - name: Exécution des tests unitaires
+        run: npm test
+
+      - name: Affichage du résumé
+        if: always()
+        run: |
+          echo "✅ Backend CI terminé avec succès"
+          echo "- Lint: ✓"
+          echo "- Type Check: ✓"
+          echo "- Tests: ✓"

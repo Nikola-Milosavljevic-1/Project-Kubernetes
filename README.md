@@ -72,7 +72,8 @@ npm test
 
 ```bash
 cd frontend
-# Ouvrir simplement index.html dans un navigateur.
+npm install
+npm start
 ```
 
 > **⚠️ Attention :** La communication frontend ↔ backend n’est pas active en local sans Docker/Kubernetes.

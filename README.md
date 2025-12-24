@@ -58,7 +58,7 @@ npm start
 * **API disponible sur :** `http://localhost:5050`
 * **Endpoint de test :** `GET /health`
 
-** Des commandes utiles pour le check qualité et tests unitaires. **
+Des commandes utiles :
 
 ```bash
 npm run lint   
@@ -76,7 +76,14 @@ npm install
 npm start
 ```
 
-> **⚠️ Attention :** La communication frontend ↔ backend n’est pas active en local sans Docker/Kubernetes.
+Des commandes utiles :
+```bash
+npm run lint   
+npm run lint:fix # fixer des erreurs de lint  
+npm run type-check 
+
+```
+
 
 ---
 

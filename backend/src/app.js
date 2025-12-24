@@ -17,7 +17,7 @@ mongoose.connection.on("connected", () => {
 });
 
 /**
- * Ne garde pas cette route en production !
+ * Ne garde pas cette route en production ! C'est juste l'initiation.
  */
 app.get("/health", (req, res) => {
   const isConnected = mongoose.connection.readyState === 1;

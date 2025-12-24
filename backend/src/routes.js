@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 // ============================================================================
@@ -9,13 +10,13 @@ const router = express.Router();
  * Connexion / Inscription
  * Route : POST /api/auth/login
  * Description : Authentifie l'utilisateur ou le crée s'il n'existe pas
- * 
+ *
  * Corps de la requête (Request Body) :
  * {
  *   "username": "etudiant1",
  *   "password": "password123"
  * }
- * 
+ *
  * Réponse (Response) :
  * {
  *   "userId": 1,
@@ -34,10 +35,10 @@ router.post("/auth/login", (req, res) => {
  * Obtenir les informations utilisateur
  * Route : GET /api/user/me
  * Description : Récupère le solde actuel de l'utilisateur pour mettre à jour l'interface
- * 
+ *
  * Header requis :
  *   Authorization: session-token-xyz
- * 
+ *
  * Réponse (Response) :
  * {
  *   "username": "etudiant1",
@@ -55,15 +56,15 @@ router.get("/user/me", (req, res) => {
  * Recharger le compte
  * Route : POST /api/user/recharge
  * Description : Ajoute des jetons fictifs au compte de l'utilisateur
- * 
+ *
  * Header requis :
  *   Authorization: session-token-xyz
- * 
+ *
  * Corps de la requête (Request Body) :
  * {
  *   "amount": 1000
  * }
- * 
+ *
  * Réponse (Response) :
  * {
  *   "success": true,
@@ -85,7 +86,7 @@ router.post("/user/recharge", (req, res) => {
  * Obtenir l'état du Jackpot
  * Route : GET /api/game/status
  * Description : Renvoie le montant actuel de la cagnotte
- * 
+ *
  * Réponse (Response) :
  * {
  *   "jackpot": 10500
@@ -102,15 +103,15 @@ router.get("/game/status", (req, res) => {
  * Jouer (Lancer la loterie)
  * Route : POST /api/game/play
  * Description : Exécute la logique principale du jeu
- * 
+ *
  * Header requis :
  *   Authorization: session-token-xyz
- * 
+ *
  * Corps de la requête (Request Body) :
  * {
  *   "betAmount": 50
  * }
- * 
+ *
  * Logique interne (Serveur) :
  * 1. Vérifier si User.balance >= betAmount. Sinon, retourner une erreur.
  * 2. Déduire la mise : User.balance = User.balance - betAmount.
@@ -124,7 +125,7 @@ router.get("/game/status", (req, res) => {
  *    - Enregistrer la victoire dans l'historique
  *    - Réinitialiser le Jackpot à sa valeur par défaut (ex: 1000)
  *    - Retourner le résultat "win"
- * 
+ *
  * Réponse (Response - Exemple de victoire) :
  * {
  *   "result": "win",
@@ -132,7 +133,7 @@ router.get("/game/status", (req, res) => {
  *   "currentJackpot": 1000,
  *   "userBalance": 15500
  * }
- * 
+ *
  * Réponse (Response - Exemple de défaite) :
  * {
  *   "result": "lose",
@@ -156,7 +157,7 @@ router.post("/game/play", (req, res) => {
  * Liste des vainqueurs
  * Route : GET /api/game/history
  * Description : Renvoie la liste des 10 derniers gains
- * 
+ *
  * Réponse (Response) :
  * [
  *   { "username": "alice", "amount": 5000, "date": "2023-10-27 14:00" },

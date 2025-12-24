@@ -55,8 +55,18 @@ npm install
 npm start
 ```
 
-* **API disponible sur :** `http://localhost:3000`
-* **Endpoint de test :** `GET /api/health`
+* **API disponible sur :** `http://localhost:5050`
+* **Endpoint de test :** `GET /health`
+
+** Des commandes utiles pour le check qualité et tests unitaires. **
+
+```bash
+npm run lint   
+npm run lint:fix # fixer des erreurs de lint  
+npm run type-check 
+npm test    
+
+```
 
 ### Frontend
 

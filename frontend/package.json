@@ -1,0 +1,19 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Frontend Vue",
+  "main": "app.js",
+  "scripts": {
+    "start": "npx http-server -p 8080",
+    "lint": "eslint *.js",
+    "lint:fix": "eslint *.js --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "typescript": "^5.3.3"
+  }
+}

@@ -6,4 +6,4 @@ spec:
   selector:
     app: backend
   ports:
-  - port: 3000
+  - port: 5050

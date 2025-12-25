@@ -1,3 +1,6 @@
+[![Backend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/backend-ci/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
+[![Frontend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/frontend-ci/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
+
 # Frontend / Backend – Kubernetes Project
 
 Ce projet fournit une **initialisation complète** d’une application
@@ -101,7 +104,7 @@ docker build -t frontend:1.0 ./frontend
 #### Lancer les conteneurs (test simple)
 
 ```bash
-docker run -p 3000:3000 backend:1.0
+docker run -p 5050:5050 backend:1.0
 docker run -p 8080:80 frontend:1.0
 ```
 

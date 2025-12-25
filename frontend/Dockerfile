@@ -1,5 +1,24 @@
-FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/index.html
-COPY app.js /usr/share/nginx/html/app.js
+FROM node:20-alpine
 
-EXPOSE  80
+WORKDIR /app
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+COPY package*.json ./
+
+RUN npm install http-server && \
+    npm cache clean --force
+
+COPY --chown=nodejs:nodejs *.html ./
+COPY --chown=nodejs:nodejs *.js ./
+COPY --chown=nodejs:nodejs *.d.ts ./
+
+USER nodejs
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/ || exit 1
+
+CMD ["npx", "http-server", "-p", "8080", "-c-1"]

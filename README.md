@@ -185,6 +185,38 @@ kubectl logs mongodb
 kubectl describe pod backend
 ```
 
+### Utilisation de agroCD
+1. Installer ArgoCD dans le cluster Kubernetes :
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+```
+2. Accéder à l'interface web d'ArgoCD(attend l'initialisation complète des pods) :
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```   
+Ouvrir un navigateur et aller à l'adresse : `https://localhost:8080`
+
+3. Se connecter à ArgoCD :
+- Nom d'utilisateur : `admin`
+- Mot de passe : Récupérer le mot de passe initial avec la commande suivante :
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```      
+4. Créer une nouvelle application dans ArgoCD :
+- Nom de l'application : `frontend-backend-app`
+- Projet : `default`
+- Répertoire du dépôt Git : URL du dépôt Git (ex: ``)
+- Chemin : `kubehttps://github.com/Nikola-Milosavljevic-1/Project-Kubernetes.gitrnetes/`
+- Cluster de destination : `in-cluster`
+- Espace de noms de destination : `default`
+5. Synchroniser l'application :
+- Cliquer sur "Sync" pour déployer l'application dans le cluster Kubernetes.
+
+
 ---
 
 ## 5. Développement à poursuivre

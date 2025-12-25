@@ -7,3 +7,4 @@ spec:
     app: backend
   ports:
   - port: 5050
+    targetPort: 5050

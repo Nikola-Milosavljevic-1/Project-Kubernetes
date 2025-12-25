@@ -1,5 +1,5 @@
-[![Backend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/backend-ci/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
-[![Frontend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/frontend-ci/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
+[![Backend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
+[![Frontend Build Status](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/Nikola-Milosavljevic-1/Project-Kubernetes/actions)
 
 # Frontend / Backend – Kubernetes Project
 

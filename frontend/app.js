@@ -1,8 +1,9 @@
 const { createApp } = Vue;
 
 // Configuration de l'URL de l'API
-// Utilise toujours localhost:5050 pour le développement
-const API_URL = 'http://localhost:5050';
+// En développement local: http://localhost:5050
+// En Kubernetes: http://backend:5050
+const API_URL = window.API_URL || 'http://localhost:5050';
 
 createApp({
   data() {

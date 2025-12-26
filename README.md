@@ -16,12 +16,13 @@ afin que l’équipe puisse développer les fonctionnalités métier.
 Frontend → Backend API → MongoDB
 (orchestré avec Kubernetes)
 
-yaml
 
-- Frontend : HTML / JavaScript (servi par Nginx)
-- Backend : API Node.js (Express)
+- Frontend : Vue.js
+- Backend : Express.js + Node.js
 - Database : MongoDB
-- Orchestration : Kubernetes
+- Orchestration : Kubernetes (Kind)
+- CI : GithubActions
+- CD : ArgoCD dans Kubernetes
 
 ---
 

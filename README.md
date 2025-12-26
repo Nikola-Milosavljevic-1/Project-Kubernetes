@@ -40,7 +40,7 @@ Copier le code
 ## 3. Prérequis
 
 - Docker
-- Kubernetes (Docker Desktop avec Kubernetes activé)
+- Kubernetes (Docker Desktop avec Kubernetes *kind* activé)
 - kubectl
 - Node.js (uniquement pour développement local backend)
 
@@ -61,7 +61,7 @@ npm start
 * **API disponible sur :** `http://localhost:5050`
 * **Endpoint de test :** `GET /health`
 
-Des commandes utiles :
+Des commandes utiles pour passer le ci:
 
 ```bash
 npm run lint   
@@ -79,7 +79,7 @@ npm install
 npm start
 ```
 
-Des commandes utiles :
+Des commandes utiles pour passer le ci :
 ```bash
 npm run lint   
 npm run lint:fix # fixer des erreurs de lint  
@@ -112,7 +112,7 @@ docker run -p 8080:80 frontend:1.0
 
 ---
 
-### Kubernetes (Recommandé)
+### Lancer avec Kubernetes (Recommandé, le plus proche de la production)
 
 #### Vérifier le cluster
 
@@ -127,11 +127,7 @@ kubectl get nodes
 Depuis la racine du projet :
 
 ```bash
-kubectl apply -f kubernetes/mongodb-deployment.yml
-kubectl apply -f kubernetes/backend-deployment.yml
-kubectl apply -f kubernetes/backend-service.yml
-kubectl apply -f kubernetes/frontend-deployment.yml
-kubectl apply -f kubernetes/frontend-service.yml
+kubectl apply -f ./kubernetes/
 ```
 
 ### Vérifications
@@ -158,14 +154,8 @@ kubectl get svc
 
 ### Accéder au frontend
 
-1. Récupérer le **NodePort** :
+C'est configuré le `http://localhost:80`
 
-   ```bash
-   kubectl get svc frontend
-   ```
-
-2. Ouvrir dans un navigateur :
-   `http://localhost:<NODE_PORT>`
 
 ---
 
@@ -185,7 +175,14 @@ kubectl logs mongodb
 kubectl describe pod backend
 ```
 
-### Utilisation de agroCD
+### Fermer la stack
+
+```bash
+kubectl delete -f ./kubernetes/
+```
+
+
+### Utilisation de agroCD (Déjà lancé avec Kubernetes)
 1. Installer ArgoCD dans le cluster Kubernetes :
 
 ```bash
@@ -206,7 +203,7 @@ Ouvrir un navigateur et aller à l'adresse : `https://localhost:8080`
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```      
-
+ArgoCD va surveiller les modifications des ymls dans les dossiers kubernetes sur le github et appliquer automatiquement les changements dans le cluster.
 
 
 ---

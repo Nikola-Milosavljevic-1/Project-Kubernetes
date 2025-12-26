@@ -44,6 +44,7 @@ frontend-backend-kubernetes/
 - Kubernetes (Docker Desktop avec Kubernetes *kind* activé)
 - kubectl
 - Node.js (uniquement pour développement local backend)
+- Argocd (Faut installer avec Kubernetes)
 
 ---
 
@@ -114,6 +115,10 @@ docker run -p 8080:80 frontend:1.0
 ---
 
 ### Lancer avec Kubernetes (Recommandé, le plus proche de la production)
+
+#### Installer Argocd
+
+**Voir la partie Utilisation de agroCD**
 
 #### Vérifier le cluster
 

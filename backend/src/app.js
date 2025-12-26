@@ -24,7 +24,7 @@ app.get("/health", (req, res) => {
   let message = "";
 
   if (isConnected && dbConnectedDate) {
-    message = `Database connected at: ${dbConnectedDate.toISOString()}`;
+    message = `Database connected at: ${dbConnectedDate.toISOString()}; Backend version v1.0.0`;
   } else {
     message = "Database not connected";
   }

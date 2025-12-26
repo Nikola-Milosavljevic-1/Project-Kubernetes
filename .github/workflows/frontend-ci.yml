@@ -101,13 +101,38 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add kubernetes/frontend-deployment.yml
-          git commit -m "chore: update frontend image to ${{ steps.tag.outputs.sha }}" || echo "No changes to commit"
-          git push
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update frontend image to ${{ steps.tag.outputs.sha }}"
+            
+            for i in {1..5}; do
+              echo "Attempt $i to push..."
+              
+              git pull --rebase origin main || {
+                echo "Pull failed, retrying..."
+                sleep 2
+                continue
+              }
+              
+              if git push origin main; then
+                echo "✅ Successfully pushed on attempt $i"
+                break
+              else
+                echo "⚠️  Push failed on attempt $i"
+                if [ $i -eq 5 ]; then
+                  echo "❌ Failed to push after 5 attempts"
+                  exit 1
+                fi
+                sleep 3
+              fi
+            done
+          else
+            echo "No changes to commit"
+          fi
 
       - name: Clean old Docker images
         continue-on-error: true
         run: |
-          # 获取所有 tag（除了 latest 和当前 SHA）
           TOKEN=$(curl -s -X POST \
             -H "Content-Type: application/json" \
             -d '{"username":"'"${{ secrets.DOCKERHUB_USERNAME }}"'","password":"'"${{ secrets.DOCKERHUB_TOKEN }}"'"}' \
@@ -117,7 +142,6 @@ jobs:
             https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend/tags/?page_size=100 \
             | jq -r '.results[].name' | grep -v "latest" | grep -v "${{ steps.tag.outputs.sha }}")
           
-          # 保留最近 3 个 tag，删除其他的
           TAGS_TO_DELETE=$(echo "$TAGS" | tail -n +4)
           
           for tag in $TAGS_TO_DELETE; do

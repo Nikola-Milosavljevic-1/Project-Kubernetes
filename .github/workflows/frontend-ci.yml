@@ -67,14 +67,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend
-          tags: |
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
+      - name: Generate image tag
+        id: tag
+        run: |
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "image_tag=${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend:${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "image_latest=${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend:latest" >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v5
@@ -83,10 +82,50 @@ jobs:
           file: ./frontend/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            ${{ steps.tag.outputs.image_tag }}
+            ${{ steps.tag.outputs.image_latest }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Image digest
-        run: echo "🐳 Images pushed:" && echo "${{ steps.meta.outputs.tags }}"
+      - name: Update Kubernetes deployment
+        run: |
+          sed -i "s|image: .*/project-kubernetes-frontend:.*|image: ${{ steps.tag.outputs.image_tag }}|g" kubernetes/frontend-deployment.yml
+          cat kubernetes/frontend-deployment.yml
+
+      - name: Commit and push updated deployment
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add kubernetes/frontend-deployment.yml
+          git commit -m "chore: update frontend image to ${{ steps.tag.outputs.sha }}" || echo "No changes to commit"
+          git push
+
+      - name: Clean old Docker images
+        continue-on-error: true
+        run: |
+          # 获取所有 tag（除了 latest 和当前 SHA）
+          TOKEN=$(curl -s -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"username":"'"${{ secrets.DOCKERHUB_USERNAME }}"'","password":"'"${{ secrets.DOCKERHUB_TOKEN }}"'"}' \
+            https://hub.docker.com/v2/users/login/ | jq -r .token)
+          
+          TAGS=$(curl -s -H "Authorization: JWT ${TOKEN}" \
+            https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend/tags/?page_size=100 \
+            | jq -r '.results[].name' | grep -v "latest" | grep -v "${{ steps.tag.outputs.sha }}")
+          
+          # 保留最近 3 个 tag，删除其他的
+          TAGS_TO_DELETE=$(echo "$TAGS" | tail -n +4)
+          
+          for tag in $TAGS_TO_DELETE; do
+            echo "Deleting tag: $tag"
+            curl -X DELETE \
+              -H "Authorization: JWT ${TOKEN}" \
+              https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/project-kubernetes-frontend/tags/${tag}/
+          done
+
+      - name: Deployment summary
+        run: |
+          echo "🐳 Frontend image pushed: ${{ steps.tag.outputs.image_tag }}"
+          echo "📝 Deployment file updated and committed"
+          echo "🗑️  Old images cleaned (kept latest 3 tags)"

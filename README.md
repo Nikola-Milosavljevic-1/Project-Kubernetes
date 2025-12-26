@@ -206,15 +206,7 @@ Ouvrir un navigateur et aller à l'adresse : `https://localhost:8080`
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```      
-4. Créer une nouvelle application dans ArgoCD :
-- Nom de l'application : `frontend-backend-app`
-- Projet : `default`
-- Répertoire du dépôt Git : URL du dépôt Git (ex: ``)
-- Chemin : `kubehttps://github.com/Nikola-Milosavljevic-1/Project-Kubernetes.gitrnetes/`
-- Cluster de destination : `in-cluster`
-- Espace de noms de destination : `default`
-5. Synchroniser l'application :
-- Cliquer sur "Sync" pour déployer l'application dans le cluster Kubernetes.
+
 
 
 ---

@@ -28,13 +28,13 @@ Frontend → Backend API → MongoDB
 
 ## 2. Structure du projet
 
+```text
 frontend-backend-kubernetes/
-├── backend/ # API Node.js
-├── frontend/ # Application frontend
-└── kubernetes/ # Manifests Kubernetes
+├── backend/            # API Node.js
+├── frontend/           # Application frontend
+└── kubernetes/         # Manifests Kubernetes
+```
 
-yaml
-Copier le code
 
 ---
 

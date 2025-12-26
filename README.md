@@ -116,11 +116,11 @@ docker run -p 8080:80 frontend:1.0
 
 ### Lancer avec Kubernetes (Recommandé, le plus proche de la production)
 
-#### Installer Argocd
+#### a) Installer Argocd
 
-**Voir la partie Utilisation de agroCD**
+Voir la partie Utilisation de agroCD
 
-#### Vérifier le cluster
+#### b) Vérifier le cluster
 
 Assurez-vous que le nœud est en état `Ready` :
 
@@ -128,7 +128,7 @@ Assurez-vous que le nœud est en état `Ready` :
 kubectl get nodes
 ```
 
-#### Déployer la stack complète
+#### c) Déployer la stack complète
 
 Depuis la racine du projet :
 
@@ -136,7 +136,7 @@ Depuis la racine du projet :
 kubectl apply -f ./kubernetes/
 ```
 
-### Vérifications
+#### d) Vérifications
 
 **1. Vérifier l’état des pods :**
 
@@ -158,16 +158,16 @@ mongodb-xxxxx    1/1 Running
 kubectl get svc
 ```
 
-### Accéder au frontend
+#### e) Accéder au frontend
 
 C'est configuré le `http://localhost:80`
 
 
 ---
 
-### Logs et Debug
+#### f) Logs et Debug (optionnel)
 
-### Logs d’un pod
+##### Logs d’un pod
 
 ```bash
 kubectl logs backend
@@ -175,21 +175,15 @@ kubectl logs frontend
 kubectl logs mongodb
 ```
 
-### Détails d’un pod
+##### Détails d’un pod
 
 ```bash
 kubectl describe pod backend
 ```
 
-### Fermer la stack
 
-```bash
-kubectl delete -f ./kubernetes/
-```
-
-
-### Utilisation de agroCD (Déjà lancé avec Kubernetes)
-1. Installer ArgoCD dans le cluster Kubernetes :
+#### g) Utilisation de agroCD (Déjà lancé avec Kubernetes)
+1. Installer ArgoCD dans le cluster Kubernetes (**Faut le faire avant de lancer le service Kubernetes**):
 
 ```bash
 kubectl create namespace argocd
@@ -211,6 +205,11 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 ```      
 ArgoCD va surveiller les modifications des ymls dans les dossiers kubernetes sur le github et appliquer automatiquement les changements dans le cluster.
 
+#### h) Fermer la stack
+
+```bash
+kubectl delete -f ./kubernetes/
+```
 
 ---
 

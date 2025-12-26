@@ -12,6 +12,9 @@ on:
       - 'frontend/**'
       - '.github/workflows/frontend-ci.yml'
 
+permissions:
+  contents: write
+
 jobs:
   test:
     name: Frontend - Lint & Type Check

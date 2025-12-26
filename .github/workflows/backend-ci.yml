@@ -12,6 +12,9 @@ on:
       - 'backend/**'
       - '.github/workflows/backend-ci.yml'
 
+permissions:
+  contents: write
+
 jobs:
   test:
     name: Backend - Lint, Type Check & Tests

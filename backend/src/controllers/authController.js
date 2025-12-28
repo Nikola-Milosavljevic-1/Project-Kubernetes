@@ -11,7 +11,6 @@ const { createSession } = require("../utils/sessionStore");
 async function login(req, res) {
   try {
     const { username, password } = req.body;
-    
     // Vérification des champs requis
     if (!username || !password) {
       return res.status(400).json({
@@ -19,10 +18,8 @@ async function login(req, res) {
         message: "Le nom d'utilisateur et le mot de passe sont requis"
       });
     }
-    
     // Vérifier si l'utilisateur existe déjà
     let user = await User.findOne({ username });
-    
     if (!user) {
       // Créer un nouvel utilisateur
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,10 +38,8 @@ async function login(req, res) {
         });
       }
     }
-    
     // Générer un token de session
     const token = generateToken(user.username, user._id.toString());
-    
     // Créer la session
     createSession(user._id.toString(), token, user.username);
     

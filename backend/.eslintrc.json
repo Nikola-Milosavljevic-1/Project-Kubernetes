@@ -12,6 +12,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
     "no-console": "off",
     "consistent-return": "warn",
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],

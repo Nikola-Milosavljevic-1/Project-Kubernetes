@@ -29,4 +29,3 @@ historySchema.index({ created_at: -1 });
 const History = mongoose.model("History", historySchema);
 
 module.exports = History;
-

@@ -117,6 +117,56 @@ const isLoadingHistory = ref(false)
 let jackpotInterval = null
 
 /**
+ * Fonction helper pour détecter les erreurs d'authentification
+ * @param {Error} e - L'erreur à vérifier
+ * @returns {boolean} True si c'est une erreur d'authentification
+ */
+const isAuthError = (e) => {
+  // Vérifier d'abord le statusCode HTTP (le plus fiable)
+  if (e?.statusCode === 401) {
+    return true
+  }
+
+  // Vérifier le message de manière sécurisée avec optional chaining
+  const message = e?.message
+  if (!message || typeof message !== 'string') {
+    return false
+  }
+
+  const lowerMessage = message.toLowerCase()
+
+  // Vérifier des patterns spécifiques d'erreur d'authentification
+  // Patterns basés sur les messages d'erreur réels du backend
+  // Utiliser des phrases complètes ou des combinaisons pour éviter les faux positifs
+  const authPatterns = [
+    'non authentifié',
+    'token invalide',
+    'token manquant',
+    'votre session a expiré',
+    'votre session a expiré ou est invalide',
+    'veuillez vous reconnecter',
+    'vous devez fournir un token',
+    'token d\'authentification'
+  ]
+
+  // Vérifier si le message contient un des patterns d'authentification
+  // Utiliser des patterns précis pour éviter les faux positifs
+  // (ex: "Session storage unavailable" ne devrait pas déclencher une déconnexion)
+  return authPatterns.some(pattern => lowerMessage.includes(pattern))
+}
+
+/**
+ * Fonction helper pour gérer les erreurs d'authentification
+ * Nettoie le localStorage et redirige vers la page de login
+ */
+const handleAuthError = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('userId')
+  localStorage.removeItem('username')
+  router.push('/')
+}
+
+/**
  * Charge les informations de l'utilisateur
  */
 const loadUserInfo = async () => {
@@ -126,9 +176,8 @@ const loadUserInfo = async () => {
     balance.value = data.balance
   } catch (e) {
     console.error('Erreur lors du chargement des infos utilisateur:', e)
-    // Si l'utilisateur n'est plus authentifié, rediriger vers la page de login
-    if (e.message.includes('Non authentifié') || e.message.includes('401')) {
-      router.push('/')
+    if (isAuthError(e)) {
+      handleAuthError()
     }
   }
 }
@@ -142,6 +191,15 @@ const loadJackpot = async () => {
     jackpot.value = data.jackpot
   } catch (e) {
     console.error('Erreur lors du chargement du jackpot:', e)
+    // Détecter les erreurs d'authentification (même si cette route n'en nécessite pas normalement)
+    if (isAuthError(e)) {
+      handleAuthError()
+      // Arrêter l'intervalle de rafraîchissement si on est déconnecté
+      if (jackpotInterval) {
+        clearInterval(jackpotInterval)
+        jackpotInterval = null
+      }
+    }
   }
 }
 
@@ -155,6 +213,10 @@ const loadHistory = async () => {
     history.value = data
   } catch (e) {
     console.error('Erreur lors du chargement de l\'historique:', e)
+    // Détecter les erreurs d'authentification (même si cette route n'en nécessite pas normalement)
+    if (isAuthError(e)) {
+      handleAuthError()
+    }
   } finally {
     isLoadingHistory.value = false
   }
@@ -171,6 +233,10 @@ const handleRecharge = async () => {
     const data = await rechargeAccount(1000)
     balance.value = data.newBalance
   } catch (e) {
+    if (isAuthError(e)) {
+      handleAuthError()
+      return
+    }
     error.value = e.message || 'Erreur lors du rechargement'
   } finally {
     isRecharging.value = false
@@ -206,6 +272,10 @@ const handlePlay = async () => {
       betAmount.value = null
     }, 3000)
   } catch (e) {
+    if (isAuthError(e)) {
+      handleAuthError()
+      return
+    }
     error.value = e.message || 'Erreur lors du jeu'
   } finally {
     isPlaying.value = false

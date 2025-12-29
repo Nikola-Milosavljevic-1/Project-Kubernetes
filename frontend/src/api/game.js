@@ -14,18 +14,37 @@ export async function getGameStatus() {
       }
     })
 
-    const data = await res.json()
+    // Capturer le statusCode AVANT d'essayer de parser le JSON
+    const statusCode = res.status
+
+    // Essayer de parser le JSON, mais gérer les erreurs de parsing
+    let data
+    try {
+      const text = await res.text()
+      data = text ? JSON.parse(text) : {}
+    } catch (parseError) {
+      // Si le parsing échoue, créer une erreur avec le statusCode
+      const error = new Error('Réponse invalide du serveur')
+      error.statusCode = statusCode
+      throw error
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || data.error || 'Erreur lors de la récupération du statut')
+      const error = new Error(data.message || data.error || 'Erreur lors de la récupération du statut')
+      error.statusCode = statusCode
+      throw error
     }
 
     return data
   } catch (error) {
-    if (error.message) {
+    // Si l'erreur a déjà un statusCode, on la relance telle quelle
+    if (error.statusCode) {
       throw error
     }
-    throw new Error('Impossible de récupérer l\'état du jeu')
+    // Sinon, on crée une nouvelle erreur avec le message existant
+    const newError = new Error(error.message || 'Impossible de récupérer l\'état du jeu')
+    newError.statusCode = 500
+    throw newError
   }
 }
 
@@ -39,7 +58,9 @@ export async function playGame(betAmount) {
   const token = localStorage.getItem('token')
   
   if (!token) {
-    throw new Error('Non authentifié')
+    const error = new Error('Non authentifié')
+    error.statusCode = 401
+    throw error
   }
 
   try {
@@ -52,18 +73,37 @@ export async function playGame(betAmount) {
       body: JSON.stringify({ betAmount })
     })
 
-    const data = await res.json()
+    // Capturer le statusCode AVANT d'essayer de parser le JSON
+    const statusCode = res.status
+
+    // Essayer de parser le JSON, mais gérer les erreurs de parsing
+    let data
+    try {
+      const text = await res.text()
+      data = text ? JSON.parse(text) : {}
+    } catch (parseError) {
+      // Si le parsing échoue, créer une erreur avec le statusCode
+      const error = new Error('Réponse invalide du serveur')
+      error.statusCode = statusCode
+      throw error
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || data.error || 'Erreur lors du jeu')
+      const error = new Error(data.message || data.error || 'Erreur lors du jeu')
+      error.statusCode = statusCode
+      throw error
     }
 
     return data
   } catch (error) {
-    if (error.message) {
+    // Si l'erreur a déjà un statusCode, on la relance telle quelle
+    if (error.statusCode) {
       throw error
     }
-    throw new Error('Impossible de jouer')
+    // Sinon, on crée une nouvelle erreur avec le message existant
+    const newError = new Error(error.message || 'Impossible de jouer')
+    newError.statusCode = 500
+    throw newError
   }
 }
 
@@ -81,18 +121,37 @@ export async function getGameHistory() {
       }
     })
 
-    const data = await res.json()
+    // Capturer le statusCode AVANT d'essayer de parser le JSON
+    const statusCode = res.status
+
+    // Essayer de parser le JSON, mais gérer les erreurs de parsing
+    let data
+    try {
+      const text = await res.text()
+      data = text ? JSON.parse(text) : {}
+    } catch (parseError) {
+      // Si le parsing échoue, créer une erreur avec le statusCode
+      const error = new Error('Réponse invalide du serveur')
+      error.statusCode = statusCode
+      throw error
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || data.error || 'Erreur lors de la récupération de l\'historique')
+      const error = new Error(data.message || data.error || 'Erreur lors de la récupération de l\'historique')
+      error.statusCode = statusCode
+      throw error
     }
 
     return data
   } catch (error) {
-    if (error.message) {
+    // Si l'erreur a déjà un statusCode, on la relance telle quelle
+    if (error.statusCode) {
       throw error
     }
-    throw new Error('Impossible de récupérer l\'historique')
+    // Sinon, on crée une nouvelle erreur avec le message existant
+    const newError = new Error(error.message || 'Impossible de récupérer l\'historique')
+    newError.statusCode = 500
+    throw newError
   }
 }
 

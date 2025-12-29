@@ -9,7 +9,9 @@ export async function getUserInfo() {
   const token = localStorage.getItem('token')
   
   if (!token) {
-    throw new Error('Non authentifié')
+    const error = new Error('Non authentifié')
+    error.statusCode = 401
+    throw error
   }
 
   try {
@@ -21,18 +23,37 @@ export async function getUserInfo() {
       }
     })
 
-    const data = await res.json()
+    // Capturer le statusCode AVANT d'essayer de parser le JSON
+    const statusCode = res.status
+
+    // Essayer de parser le JSON, mais gérer les erreurs de parsing
+    let data
+    try {
+      const text = await res.text()
+      data = text ? JSON.parse(text) : {}
+    } catch (parseError) {
+      // Si le parsing échoue, créer une erreur avec le statusCode
+      const error = new Error('Réponse invalide du serveur')
+      error.statusCode = statusCode
+      throw error
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || data.error || 'Erreur lors de la récupération des informations')
+      const error = new Error(data.message || data.error || 'Erreur lors de la récupération des informations')
+      error.statusCode = statusCode
+      throw error
     }
 
     return data
   } catch (error) {
-    if (error.message) {
+    // Si l'erreur a déjà un statusCode, on la relance telle quelle
+    if (error.statusCode) {
       throw error
     }
-    throw new Error('Impossible de récupérer les informations utilisateur')
+    // Sinon, on crée une nouvelle erreur avec le message existant
+    const newError = new Error(error.message || 'Impossible de récupérer les informations utilisateur')
+    newError.statusCode = 500
+    throw newError
   }
 }
 
@@ -46,7 +67,9 @@ export async function rechargeAccount(amount) {
   const token = localStorage.getItem('token')
   
   if (!token) {
-    throw new Error('Non authentifié')
+    const error = new Error('Non authentifié')
+    error.statusCode = 401
+    throw error
   }
 
   try {
@@ -59,18 +82,37 @@ export async function rechargeAccount(amount) {
       body: JSON.stringify({ amount })
     })
 
-    const data = await res.json()
+    // Capturer le statusCode AVANT d'essayer de parser le JSON
+    const statusCode = res.status
+
+    // Essayer de parser le JSON, mais gérer les erreurs de parsing
+    let data
+    try {
+      const text = await res.text()
+      data = text ? JSON.parse(text) : {}
+    } catch (parseError) {
+      // Si le parsing échoue, créer une erreur avec le statusCode
+      const error = new Error('Réponse invalide du serveur')
+      error.statusCode = statusCode
+      throw error
+    }
 
     if (!res.ok) {
-      throw new Error(data.message || data.error || 'Erreur lors du rechargement')
+      const error = new Error(data.message || data.error || 'Erreur lors du rechargement')
+      error.statusCode = statusCode
+      throw error
     }
 
     return data
   } catch (error) {
-    if (error.message) {
+    // Si l'erreur a déjà un statusCode, on la relance telle quelle
+    if (error.statusCode) {
       throw error
     }
-    throw new Error('Impossible de recharger le compte')
+    // Sinon, on crée une nouvelle erreur avec le message existant
+    const newError = new Error(error.message || 'Impossible de recharger le compte')
+    newError.statusCode = 500
+    throw newError
   }
 }
 

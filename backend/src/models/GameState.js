@@ -21,17 +21,17 @@ const GameState = mongoose.model("GameState", gameStateSchema);
 /**
  * Fonction helper pour récupérer ou créer l'état du jeu
  * S'assure qu'il n'y a qu'un seul document d'état de jeu
- * 
+ *
  * @returns {Promise} L'état du jeu (document MongoDB)
  */
 async function getCurrentState() {
   let state = await GameState.findOne();
-  
+
   // Si aucun état n'existe, on en crée un avec la valeur par défaut
   if (!state) {
     state = await GameState.create({ current_jackpot: 1000 });
   }
-  
+
   return state;
 }
 
@@ -40,4 +40,3 @@ async function getCurrentState() {
 GameState.getCurrentState = getCurrentState;
 
 module.exports = GameState;
-

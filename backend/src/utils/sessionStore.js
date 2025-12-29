@@ -7,7 +7,7 @@ const sessions = new Map();
 
 /**
  * Crée une nouvelle session pour un utilisateur
- * 
+ *
  * @param {string} userId - L'ID de l'utilisateur
  * @param {string} token - Le token de session
  * @param {string} username - Le nom d'utilisateur
@@ -22,7 +22,7 @@ function createSession(userId, token, username) {
 
 /**
  * Récupère les informations d'une session à partir du token
- * 
+ *
  * @param {string} token - Le token de session
  * @returns {Object|null} Les informations de la session ou null si invalide
  */
@@ -32,7 +32,7 @@ function getSession(token) {
 
 /**
  * Supprime une session (pour la déconnexion)
- * 
+ *
  * @param {string} token - Le token de session à supprimer
  */
 function deleteSession(token) {
@@ -44,4 +44,3 @@ module.exports = {
   getSession,
   deleteSession
 };
-

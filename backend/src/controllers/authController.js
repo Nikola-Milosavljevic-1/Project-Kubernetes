@@ -42,16 +42,16 @@ async function login(req, res) {
     const token = generateToken(user.username, user._id.toString());
     // Créer la session
     createSession(user._id.toString(), token, user.username);
-    
+
     // Retourner la réponse
-    res.json({
+    return res.json({
       userId: user._id,
       username: user.username,
-      token: token
+      token
     });
   } catch (error) {
     console.error("Erreur lors de la connexion:", error);
-    
+
     if (error.code === 11000) {
       // Erreur de duplication (username déjà pris)
       return res.status(400).json({
@@ -59,8 +59,8 @@ async function login(req, res) {
         message: "Ce nom d'utilisateur est déjà pris"
       });
     }
-    
-    res.status(500).json({
+
+    return res.status(500).json({
       error: "Erreur serveur",
       message: "Une erreur est survenue lors de la connexion"
     });
@@ -70,4 +70,3 @@ async function login(req, res) {
 module.exports = {
   login
 };
-

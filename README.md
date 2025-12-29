@@ -78,7 +78,7 @@ npm test
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 Des commandes utiles pour passer le ci :
@@ -89,28 +89,6 @@ npm run type-check
 
 ```
 
-
----
-
-### Docker
-
-#### Build des images
-
-Depuis la racine du projet :
-
-```bash
-docker build -t backend:1.0 ./backend
-docker build -t frontend:1.0 ./frontend
-```
-
-#### Lancer les conteneurs (test simple)
-
-```bash
-docker run -p 5050:5050 backend:1.0
-docker run -p 8080:80 frontend:1.0
-```
-
-* **Frontend accessible sur :** `http://localhost:8080`
 
 ---
 

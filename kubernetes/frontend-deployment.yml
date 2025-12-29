@@ -17,7 +17,7 @@ spec:
         image: aminoc/project-kubernetes-frontend:0b186b4
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         env:
         - name: API_URL
           value: "http://localhost:5050"

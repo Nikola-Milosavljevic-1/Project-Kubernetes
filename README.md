@@ -20,9 +20,13 @@ Frontend → Backend API → MongoDB
 - Frontend : Vue.js
 - Backend : Express.js + Node.js
 - Database : MongoDB
+    MongoDB est utilisé comme base de données NoSQL afin de stocker les utilisateurs grâce à un schéma flexible, facilement évolutif et bien adapté aux applications modernes.
 - Orchestration : Kubernetes (Kind)
+    Kubernetes est utilisé pour orchestrer les conteneurs Docker, car il est simple à exécuter en local et permet de se rapprocher des conditions de déploiement réelles.
 - CI : GithubActions
+    La chaîne d’intégration continue vérifie automatiquement la qualité du code, exécute les tests unitaires du backend et construit les images Docker. La CI met à jour les fichiers de déploiement Kubernetes en modifiant la version des images Docker afin de déclencher le déploiement continu à chaque changement validé. Les flags sont affichés dans le README pour indiquer l’état de la CI, des tests et du déploiement.
 - CD : ArgoCD dans Kubernetes
+    Le déploiement continu repose sur un cluster Kubernetes local supervisé par ArgoCD. ArgoCD détecte automatiquement toute modification des fichiers Kubernetes et déploie la nouvelle version en récupérant les images mises à jour depuis Docker Hub.
 
 ---
 

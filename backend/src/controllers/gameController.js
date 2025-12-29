@@ -9,6 +9,7 @@ const { checkWin } = require("../utils/gameLogic");
  */
 async function getStatus(req, res) {
   try {
+    // @ts-ignore - getCurrentState est ajoutée dynamiquement
     const gameState = await GameState.getCurrentState();
 
     return res.json({
@@ -61,6 +62,7 @@ async function play(req, res) {
     }
 
     // Récupérer l'état du jeu
+    // @ts-ignore - getCurrentState est ajoutée dynamiquement
     const gameState = await GameState.getCurrentState();
 
     // Déduire la mise du solde de l'utilisateur

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: aminoc/project-kubernetes-frontend:0b186b4
+        image: aminoc/project-kubernetes-frontend:ae98f76
         imagePullPolicy: Always
         ports:
         - containerPort: 80

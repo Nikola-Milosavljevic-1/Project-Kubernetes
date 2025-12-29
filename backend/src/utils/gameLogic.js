@@ -9,8 +9,8 @@
  * @returns {number} La probabilité de gagner (entre 0 et 1)
  */
 function calculateWinProbability(betAmount) {
-  // Probabilité de base : 1% (0.01)
-  const baseProbability = 0.01;
+  // Probabilité de base : 0.01% (0.0001)
+  const baseProbability = 0.0001;
 
   // Bonus : plus on mise, plus on a de chances
   // Pour 10 jetons : +0.1%, pour 50 : +0.5%, pour 100 : +1%, etc.

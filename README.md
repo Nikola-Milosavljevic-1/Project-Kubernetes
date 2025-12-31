@@ -140,7 +140,7 @@ frontend-xxxxx   1/1 Running
 backend-xxxxx    1/1 Running
 mongodb-xxxxx    1/1 Running
 ```
-**Attention, si un pod n'est pas en état `Running`, il peut y avoir un problème avec le déploiement ou la configuration. Le mongodb risque d'avoir pas activé correctement sur certaines machine, veuillez télécharger l'image MongoDB depuis Docker Hub via la commande `docker pull mongo:6.0` et le Kubernetes va le charger automatiquement**
+**Attention, si un pod n'est pas en état `Running`, il peut y avoir un problème avec le déploiement ou la configuration. Le mongodb risque d'avoir pas activé correctement sur certaines machine, veuillez télécharger l'image MongoDB depuis Docker Hub via la commande `docker pull mongo:6` et le Kubernetes va le charger automatiquement**
 
 **2. Vérifier les services :**
 

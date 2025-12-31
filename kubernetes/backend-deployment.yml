@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: aminoc/project-kubernetes-backend:0b186b4
+        image: aminoc/project-kubernetes-backend:6a61361
         imagePullPolicy: Always
         ports:
         - containerPort: 5050

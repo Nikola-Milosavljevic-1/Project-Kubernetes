@@ -25,6 +25,13 @@ Frontend → Backend API → MongoDB
     Kubernetes est utilisé pour orchestrer les conteneurs Docker, car il est simple à exécuter en local et permet de se rapprocher des conditions de déploiement réelles.
 - CI : GithubActions
     La chaîne d’intégration continue vérifie automatiquement la qualité du code, exécute les tests unitaires du backend et construit les images Docker. La CI met à jour les fichiers de déploiement Kubernetes en modifiant la version des images Docker afin de déclencher le déploiement continu à chaque changement validé. Les flags sont affichés dans le README pour indiquer l’état de la CI, des tests et du déploiement.
+    ```yml
+    #la partie dans le workflow github actions qui met à jour les ymls kubernetes
+    - name: Update Kubernetes deployment
+        run: |
+          sed -i "s|image: .*/project-kubernetes-backend:.*|image: ${{ steps.tag.outputs.image_tag }}|g" kubernetes/backend-deployment.yml
+          cat kubernetes/backend-deployment.yml
+    ```
 - CD : ArgoCD dans Kubernetes
     Le déploiement continu repose sur un cluster Kubernetes local supervisé par ArgoCD. ArgoCD détecte automatiquement toute modification des fichiers Kubernetes et déploie la nouvelle version en récupérant les images mises à jour depuis Docker Hub.
 
@@ -133,6 +140,7 @@ frontend-xxxxx   1/1 Running
 backend-xxxxx    1/1 Running
 mongodb-xxxxx    1/1 Running
 ```
+**Attention, si un pod n'est pas en état `Running`, il peut y avoir un problème avec le déploiement ou la configuration. Le mongodb risque d'avoir pas activé correctement sur certaines machine, veuillez télécharger l'image MongoDB depuis Docker Hub via la commande `docker pull mongo:6.0` et le Kubernetes va le charger automatiquement**
 
 **2. Vérifier les services :**
 

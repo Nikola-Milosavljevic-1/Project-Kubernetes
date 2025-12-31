@@ -18,7 +18,7 @@
       <div class="jackpot-container">
         <h2 class="jackpot-label">JACKPOT</h2>
         <div class="jackpot-amount">{{ jackpot.toLocaleString() }} 🎰</div>
-        <p class="jackpot-subtitle">Cagnotte commune à tous les joueurs version 1.0</p>
+        <p class="jackpot-subtitle">Cagnotte commune à tous les joueurs</p>
       </div>
 
       <div class="game-form">
